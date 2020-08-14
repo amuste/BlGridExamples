@@ -1,0 +1,53 @@
+﻿@using System.Globalization
+@using BlGrid.Infrastructure.Entities
+@using BlGrid.Shared.Infrastructure.Entities
+@using BlGridServer.Infrastructure.Entities
+
+<div style="display: flex; flex-direction: column; width: 100%">
+    <div style="display: flex;flex-direction: row;justify-content: space-between;height: 15px;align-items: center;font-size: 0.675rem;">
+        <span>
+            0
+        </span>
+        <span>
+            5000
+        </span>
+    </div>
+    <div style="display: flex;height: 15px;font-size: 0.675rem;align-items: center;">
+        <span style="width: @GetBarWidth(RowNode.RowData.Balance); background-color: @GetBarColor(RowNode.RowData.Balance); height: 100%; color: #FFFFFF; display: flex; justify-content: flex-end; align-items: center; padding-right: 5px;">
+            @RowNode.RowData.Balance
+        </span>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public RowNode<Person> RowNode { get; set; }
+
+    private string GetBarColor(string balance)
+    {
+        string bkColor = "red";
+
+        var value = decimal.Parse(balance, NumberStyles.Currency);
+
+        if (value >= 0 && value <= 1500) bkColor = "red";
+
+        if (value >= 1500 && value <= 2500) bkColor = "orange";
+
+        if (value >= 2500 && value <= 5000) bkColor = "green";
+
+        return bkColor;
+    }
+
+    private string GetBarWidth(string balance)
+    {
+        string bkColor = "red";
+
+        var value = decimal.Parse(balance, NumberStyles.Currency);
+
+        var barWidth = (250 * value) / 5000;
+
+        return $"{barWidth}px";
+    }
+
+}

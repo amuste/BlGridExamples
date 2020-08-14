@@ -1,0 +1,78 @@
+﻿@import "_mixins.scss";
+@import "../../Pages/_app-styles.scss";
+
+.dnet-desktop-content {
+    padding: 0;
+    flex: 1 1 0;
+    height: calc(100% - 50px);
+    --dnet-dash-scrollbar-foreground-color: #BDBDBD;
+}
+
+.dnet-panel-header-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    justify-content: space-between;
+    background-color: #FFFFFF;
+/*    border-bottom: 1px solid #eee;*/
+    padding: 0 10px 0 10px;
+}
+
+.dnet-panel-header-text {
+}
+
+.dnet-panel-header-controls {
+    display: flex;
+}
+
+.dnet-panel-header-controls-container {
+}
+
+$button-height: 1.3625rem;
+.dnet-panel-header-control-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 100%;
+    text-align: center;
+    padding: 0 1rem 0 0;
+
+    &:hover {
+/*        color: $secondary-reset;*/
+        cursor: pointer;
+    }
+
+    .dnet-button-icon {
+        height: $button-height;
+    }
+
+    .dnet-button-text {
+        font-size: .625rem;
+    }
+
+    &.button-disabled {
+        opacity: .5;
+
+        &:hover {
+            cursor: not-allowed;
+/*            color: $primary-reset;*/
+        }
+    }
+}
+
+.dnet-panel-header-button-icon {
+    display: block;
+    background-repeat: no-repeat;
+    background-size: 1em 1em;
+    height: 1em;
+    width: 1em;
+    cursor: pointer;
+    color: #5f6368;
+}
+
+.blg-panel-control-test {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='black'><path fill-rule='evenodd' clip-rule='evenodd' d='M3.17 6.706a5 5 0 0 1 7.103-3.16.5.5 0 1 0 .454-.892A6 6 0 1 0 13.455 5.5a.5.5 0 0 0-.91.417 5 5 0 1 1-9.375.789z'/><path fill-rule='evenodd' d='M8.147.146a.5.5 0 0 1 .707 0l2.5 2.5a.5.5 0 0 1 0 .708l-2.5 2.5a.5.5 0 1 1-.707-.708L10.293 3 8.147.854a.5.5 0 0 1 0-.708z'/></svg>");
+}

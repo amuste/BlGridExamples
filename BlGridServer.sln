@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29721.120
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.Shared", "src\BlGrid.Shared\BlGrid.Shared.csproj", "{BFC52651-D657-4766-A397-C568E0716484}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.ServerSide", "samples\BlGrid.ServerSide\BlGrid.ServerSide.csproj", "{18C2BCDB-9DBA-4AAF-A213-713112C42AB2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.ClientSide", "samples\BlGrid.ClientSide\BlGrid.ClientSide.csproj", "{E89C43EB-BE58-47CE-BE85-352008D43111}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.Hosted.Server", "samples\BlGrid.Hosted\Server\BlGrid.Hosted.Server.csproj", "{1205D08F-7B27-48B5-9BF5-EA413018E7B8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.Hosted.Client", "samples\BlGrid.Hosted\Client\BlGrid.Hosted.Client.csproj", "{896BF2E7-31C4-4263-B991-4C034E84D275}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlGrid.Api", "samples\BlGrid.Api\BlGrid.Api.csproj", "{0D2ECE23-4BE0-4395-913B-16AF3BD46CD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFC52651-D657-4766-A397-C568E0716484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC52651-D657-4766-A397-C568E0716484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC52651-D657-4766-A397-C568E0716484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC52651-D657-4766-A397-C568E0716484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18C2BCDB-9DBA-4AAF-A213-713112C42AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18C2BCDB-9DBA-4AAF-A213-713112C42AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18C2BCDB-9DBA-4AAF-A213-713112C42AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18C2BCDB-9DBA-4AAF-A213-713112C42AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E89C43EB-BE58-47CE-BE85-352008D43111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E89C43EB-BE58-47CE-BE85-352008D43111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E89C43EB-BE58-47CE-BE85-352008D43111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E89C43EB-BE58-47CE-BE85-352008D43111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1205D08F-7B27-48B5-9BF5-EA413018E7B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1205D08F-7B27-48B5-9BF5-EA413018E7B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1205D08F-7B27-48B5-9BF5-EA413018E7B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1205D08F-7B27-48B5-9BF5-EA413018E7B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896BF2E7-31C4-4263-B991-4C034E84D275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896BF2E7-31C4-4263-B991-4C034E84D275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896BF2E7-31C4-4263-B991-4C034E84D275}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896BF2E7-31C4-4263-B991-4C034E84D275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D2ECE23-4BE0-4395-913B-16AF3BD46CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D2ECE23-4BE0-4395-913B-16AF3BD46CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D2ECE23-4BE0-4395-913B-16AF3BD46CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D2ECE23-4BE0-4395-913B-16AF3BD46CD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A42E05AE-1EB3-41AE-9A0D-F22B7C407123}
+	EndGlobalSection
+EndGlobal

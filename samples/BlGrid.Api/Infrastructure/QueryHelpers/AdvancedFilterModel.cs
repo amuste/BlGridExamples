@@ -1,0 +1,30 @@
+﻿using System.Collections.Generic;
+
+namespace BlGrid.Api.Infrastructure.QueryHelpers
+{
+    public class AdvancedFilterModel
+    {
+        public string Column { get; set; }
+
+        public string Value { get; set; }
+
+        public string AdditionalValue { get; set; }
+
+        public CellDataType Type { get; set; }
+
+        public FilterOperator Operator { get; set; }
+
+        public FilterOperator AdditionalOperator { get; set; }
+
+        public FilterCondition Condition { get; set; }
+
+        public FilterMode Mode { get; set; }
+
+        public string DateFormat { get; set; }
+
+        public IList<string> FilterValues { get; set; }
+
+        public FilterCondition FilterLinkCondition { get; set; } = FilterCondition.And;
+    }
+
+}

@@ -1,0 +1,16 @@
+﻿@using System.Globalization
+@using BlGrid.Infrastructure.Entities
+@using BlGrid.Shared.Infrastructure.Entities
+@using BlGridServer.Infrastructure.Entities
+
+<div style="display: flex; width: 100%; align-items: center; justify-content: center; height: 100%">
+  <span class="blg-no-pic blg-no-pic-grey">
+
+  </span>
+</div>
+
+@code {
+
+    [Parameter]
+    public RowNode<Person> RowNode { get; set; }
+}

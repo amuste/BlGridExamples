@@ -1,0 +1,245 @@
+﻿@page "/RowSelectionExample"
+
+@using BlGrid.Infrastructure.Entities
+@using BlGrid.Infrastructure.Enums
+@using BlGrid.Shared.Shared.CustomComponents
+@using BlGridServer.Infrastructure.Entities
+@using DnetAdminDashboard.Infrastructure.Enums
+@using DnetAdminDashboard.Infrastructure.Interfaces
+@using DnetAdminDashboard.Infrastructure.Models
+@using System.Net.Http.Json
+@using BlGrid.Shared.Infrastructure.Entities
+
+@inject IThemeMessageService<ThemeConfigData> ThemeMessageService
+@inject HttpClient HttpClient
+@inject IHttpClientFactory ClientFactory
+
+<div class="container-fluid" style="padding-top: 10px;">
+    <div class="row" style="height: calc(100% - 60px)">
+        <div class="col-12" style="height: calc(100% - 0px);">
+            <div class="dnet-panel-header-wrapper">
+                <div class="dnet-panel-header-text">
+                    <div>
+                        Single row selection
+                    </div>
+                </div>
+                <div class="dnet-panel-header-controls">
+                    <div class="dnet-panel-header-controls-container">
+                        <div>
+                            <div class="dnet-panel-header-control-button" @onclick="()=>SelectAll()">
+                                <span class="dnet-panel-header-button-icon blg-panel-control-test"></span>
+                                <span class="dnet-button-text">Select All</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dnet-panel-header-controls-container">
+                        <div>
+                            <div class="dnet-panel-header-control-button" @onclick="()=>DeselectAll()">
+                                <span class="dnet-panel-header-button-icon blg-panel-control-test"></span>
+                                <span class="dnet-button-text">Deselect All</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dnet-panel-header-controls-container">
+                        <div>
+                            <div class="dnet-panel-header-control-button" @onclick="()=>ToggleChecks()">
+                                <span class="dnet-panel-header-button-icon blg-panel-control-test"></span>
+                                <span class="dnet-button-text">Show & Hide checks </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="height: calc(100% - 0px); width: 100%; background-color: #FFFFFF">
+                <BlgGrid @ref="_blGridReference"
+                         GridData="@Persons"
+                         GridColumns="@GridColumns"
+                         TItem="Person"
+                         GridOptions="GridOptions">
+                </BlgGrid>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private BlgGrid<Person> _blGridReference;
+
+    public List<Person> Persons { get; set; }
+
+    public List<GridColumn<Person>> GridColumns { get; set; }
+
+    public GridColumn<Person> GroupGridColumn { get; set; }
+
+    public GridOptions<Person> GridOptions { get; set; }
+
+
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        GridOptions = GetGridOptions();
+
+        var persons = await GetPersons();
+
+        GridOptions.NumberOfRows = persons.Count;
+
+        Persons = persons;
+
+        GridColumns = GetGridColumns();
+
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        SetupTheme();
+    }
+
+    private void SetupTheme()
+    {
+        var themeConfigData = new ThemeConfigData()
+        {
+            IsDesktopMode = true,
+            IsFooterHidden = true,
+            IsHeaderHidden = false,
+            IsLeftColumnHidden = false,
+            IsLeftColumnFixed = true,
+            IsHeaderFixed = true,
+            ShowMinifier = false
+        };
+
+        var actionMessage = new ActionMessage<ThemeConfigData>
+        {
+            Emitter = ThemeMessageEmitter.DefaultComponent,
+            Data = themeConfigData
+        };
+
+        ThemeMessageService.SendMessage(actionMessage);
+    }
+
+    private async Task<List<Person>> GetPersons()
+    {
+        var client = ClientFactory.CreateClient("WebHostURL");
+
+        var dataPersons = await client.GetFromJsonAsync<List<Person>>("/sample-data/person_500.json");
+
+        return dataPersons;
+    }
+
+    private GridOptions<Person> GetGridOptions()
+    {
+        return new GridOptions<Person>()
+        {
+            HeaderHeight = 40,
+            RowHeight = 40,
+            SuppressRowClickSelection = false,
+            RowMultiSelectWithClick = true, //Default
+            GridClass = "cvs-bl-grid",
+        };
+    }
+
+    public void SelectAll()
+    {
+        _blGridReference.SelectAll();
+    }
+
+    public void DeselectAll()
+    {
+        _blGridReference.DeselectAll();
+    }
+
+    private bool _showChecks = false;
+    public void ToggleChecks()
+    {
+        _showChecks = !_showChecks;
+
+        GridOptions.CheckboxSelectionColumn = _showChecks;
+
+        _blGridReference.SetColumnDefs(GridColumns);
+    }
+
+    private List<GridColumn<Person>> GetGridColumns()
+    {
+        var height = 40;
+        var width = 200;
+        var canGrow = 0;
+
+        return new List<GridColumn<Person>> {
+                        new GridColumn<Person> {
+                            CellId = 3,
+                            HeaderName = "IsActive",
+                            DataField = "IsActive",
+                            Width= 150,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.IsActive,
+                            AlingContent = AlingContent.Center
+                        },
+                        new GridColumn<Person> {
+                            CellId = 5,
+                            HeaderName = "Age",
+                            DataField = "Age",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Age,
+                            AlingContent = AlingContent.Center
+                        },
+                        new GridColumn<Person> {
+                            CellId = 0,
+                            HeaderName = "Name",
+                            DataField = "Name",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Name,
+                        },
+                        new GridColumn<Person> {
+                            CellId = 1,
+                            HeaderName = "Gender",
+                            DataField = "Gender",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Gender
+                        },
+                        new GridColumn<Person> {
+                            CellId = 6,
+                            HeaderName = "Company",
+                            DataField = "Company",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Company,
+                        },
+                        new GridColumn<Person> {
+                            CellId = 7,
+                            HeaderName = "Email",
+                            DataField = "Email",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Email,
+                        },
+                          new GridColumn<Person> {
+                            CellId = 11,
+                            HeaderName = "Phone",
+                            DataField = "Phone",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Phone
+                        },
+                           new GridColumn<Person> {
+                            CellId = 12,
+                            HeaderName = "Address",
+                            DataField = "Address",
+                            Width= width,
+                            Height= height,
+                            CanGrow = canGrow,
+                            CellData = (x) => x.Address
+                        }
+
+        };
+    }
+}
