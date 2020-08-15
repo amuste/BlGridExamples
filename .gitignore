@@ -74,3 +74,10 @@ _[Ss]cripts
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
+samples/BlGrid.Api/appsettings.Production.json
+
+samples/BlGrid.ServerSide/appsettings.Production.json
+
+samples/BlGrid.Api/Properties/PublishProfiles/FolderProfile.pubxml
+
+samples/BlGrid.ServerSide/Properties/PublishProfiles/FolderProfile.pubxml
