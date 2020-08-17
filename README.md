@@ -37,3 +37,11 @@ A simple example is provided with the minimum possible configuration, you can fi
 * Multi row selection
 * Checkbox column
 * Columns definition by code
+* Base on Flexbox CSS
+* Not Boostrap dependency
+* Not FontAwesome dependency
+
+### Upcomming Features
+* Row virtualization
+* Pinned Columns
+* Navigate to specific page in paginator
