@@ -11,40 +11,38 @@
 @using DnetAdminDashboard.Infrastructure.Models
 @using System.Net.Http.Json
 @using BlGrid.Shared.Infrastructure.Entities
-@using DnetSpinnerComponent.Infrastructure.Interfaces
 
 @inject IThemeMessageService<ThemeConfigData> ThemeMessageService
 @inject HttpClient HttpClient
-@inject ISpinnerService SpinnerService
 
-<div class="container-fluid" style="padding-top: 10px;">
-    <div class="row" style="height: calc(100% - 60px)">
-        <div class="col-12" style="height: calc(100% - 0px);">
-            <div class="dnet-panel-header-wrapper">
-                <div class="dnet-panel-header-text">
-                    <div>
-                        Server side operations ( Filtering, AdvancedFiltering, Sorting, Pagination)
+    <div class="container-fluid" style="padding-top: 10px;">
+        <div class="row" style="height: calc(100% - 60px)">
+            <div class="col-12" style="height: calc(100% - 0px);">
+                <div class="dnet-panel-header-wrapper">
+                    <div class="dnet-panel-header-text">
+                        <div>
+                            Server side operations ( Filtering, AdvancedFiltering, Sorting, Pagination)
+                        </div>
+                    </div>
+                    <div class="dnet-panel-header-controls">
                     </div>
                 </div>
-                <div class="dnet-panel-header-controls">
+                <div style="height: calc(100% - 0px); width: 100%; background-color: #FFFFFF">
+                    <BlgGrid @ref="_blGridReference" GridData="@Persons"
+                             GridColumns="@GridColumns"
+                             GroupGridColumn="GroupGridColumn"
+                             TItem="Person"
+                             GridOptions="GridOptions"
+                             OnSortingChanged="SortingChanged"
+                             OnFilterChanged="FilterChanged"
+                             OnAdvancedFilterChanged="AdvancedFilterChanged"
+                             OnGroupingChanged="GroupingChanged"
+                             OnPaginationChanged="PaginationChanged">
+                    </BlgGrid>
                 </div>
-            </div>
-            <div style="height: calc(100% - 0px); width: 100%; background-color: #FFFFFF">
-                <BlgGrid @ref="_blGridReference" GridData="@Persons"
-                         GridColumns="@GridColumns"
-                         GroupGridColumn="GroupGridColumn"
-                         TItem="Person"
-                         GridOptions="GridOptions"
-                         OnSortingChanged="SortingChanged"
-                         OnFilterChanged="FilterChanged"
-                         OnAdvancedFilterChanged="AdvancedFilterChanged"
-                         OnGroupingChanged="GroupingChanged"
-                         OnPaginationChanged="PaginationChanged">
-                </BlgGrid>
             </div>
         </div>
     </div>
-</div>
 
 @code {
 
@@ -107,7 +105,6 @@
 
     private async Task<Tuple<int, List<Person>>> GetServerSidePersons()
     {
-        SpinnerService.UdateCounter(1);
 
         var searchModel = new SearchModel
         {
@@ -126,8 +123,6 @@
         var response = await HttpClient.PostAsJsonAsync("api/person/searchpersons", searchModel);
 
         var data = await response.Content.ReadFromJsonAsync<PersonSearchResult>();
-
-        SpinnerService.UdateCounter(-1);
 
         return new Tuple<int, List<Person>>(data.TotalItems, data.Persons);
     }
@@ -160,8 +155,6 @@
 
     private async Task ServerSideOperation(SearchModel searchModel)
     {
-        SpinnerService.UdateCounter(1);
-
         if (_blGridReference is null) return;
 
         if (searchModel.SortModel == null)
@@ -178,8 +171,6 @@
         var data = await response.Content.ReadFromJsonAsync<PersonSearchResult>();
 
         _blGridReference.SetRowData(data.Persons, data.TotalItems);
-
-        SpinnerService.UdateCounter(-1);
     }
 
     private GridOptions<Person> GetGridOptions()
@@ -202,7 +193,7 @@
     {
         var height = 40;
         var width = 200;
-        var canGrow = 0;
+        var canGrow = 1;
 
         return new List<GridColumn<Person>> {
                         new GridColumn<Person> {
@@ -226,7 +217,6 @@
                             AlingContent = AlingContent.Center,
                             CellDataType = CellDataType.Number,
                             Sortable = true,
-                            SortStatus = SortOrder.Ascending
                         },
                         new GridColumn<Person> {
                             CellId = 0,

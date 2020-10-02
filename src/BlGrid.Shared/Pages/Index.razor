@@ -72,9 +72,15 @@
     public GridOptions<Person> GridOptions { get; set; }
 
 
-    public override async Task SetParametersAsync(ParameterView parameters)
+    protected override async Task OnInitializedAsync()
     {
+        SetupTheme();
+
         GridOptions = GetGridOptions();
+
+        GridColumns = GetGridColumns();
+
+        GroupGridColumn = GetGroupGridColumn();
 
         if (GridOptions.EnableServerSideAdvancedFilter || GridOptions.EnableServerSideFilter || GridOptions.EnableServerSidePagination || GridOptions.EnableServerSideSorting)
         {
@@ -93,16 +99,7 @@
             Persons = persons;
         }
 
-        GridColumns = GetGridColumns();
-
-        GroupGridColumn = GetGroupGridColumn();
-
-        StateHasChanged();
-    }
-
-    protected override void OnInitialized()
-    {
-        SetupTheme();
+        _blGridReference.SetRowData(Persons);
     }
 
     private void SetupTheme()
@@ -235,8 +232,9 @@
     {
         return new GridOptions<Person>()
         {
-            HeaderHeight = 40,
+            HeaderHeight = 60,
             RowHeight = 40,
+            PaginationPageSize = 25,
             SuppressRowClickSelection = false,
             RowMultiSelectWithClick = true,
             GridClass = "cvs-bl-grid",
@@ -253,7 +251,8 @@
             CheckboxSelectionColumn = true,
             DefaultAdvancedFilterOperator = FilterOperator.Contains,
             IsDebugMode = false,
-            NullValueSortedToEnd = true
+            NullValueSortedToEnd = true,
+            CheckboxSelectionPinned = false,
         };
     }
 
@@ -278,11 +277,12 @@
     {
         var height = 40;
         var width = 200;
-        var canGrow = 0;
+        var canGrow = 1;
 
         return new List<GridColumn<Person>> {
                         new GridColumn<Person> {
                             CellId = 10,
+                            ColumnOrder = 10,
                             HeaderName = "Id",
                             DataField = "Id",
                             Width= width,
@@ -292,16 +292,18 @@
                         },
                         new GridColumn<Person> {
                             CellId = 8,
+                            ColumnOrder = 8,
                             HeaderName = "Index",
                             DataField = "Index",
                             Width= 100,
                             Height= height,
                             CanGrow = canGrow,
                             Sortable = true,
-                            CellData = (x) => x.Index
+                            CellData = (x) => x.Index,
                         },
                         new GridColumn<Person> {
                             CellId = 3,
+                            ColumnOrder = 3,
                             HeaderName = "IsActive",
                             DataField = "IsActive",
                             Width= 150,
@@ -311,10 +313,12 @@
                             CellDataType = CellDataType.Boolean,
                             RowGroup = true,
                             ShowGroupingButtons = true,
-                            AlingContent = AlingContent.Center
+                            AlingContent = AlingContent.Center,
+                            Pinned = Pinned.Left
                         },
                         new GridColumn<Person> {
                             CellId = 2,
+                            ColumnOrder = 2,
                             HeaderName = "Balance",
                             DataField = "Balance",
                             Width= width,
@@ -322,9 +326,11 @@
                             CanGrow = canGrow,
                             CellData = (x) => x.Balance,
                             CellTemplate = typeof(CellPercentageComponent),
+                            Pinned = Pinned.Right
                         },
                          new GridColumn<Person> {
-                            CellId = 4,
+                            CellId = 6,
+                            ColumnOrder = 6,
                             HeaderName = "Picture",
                             DataField = "Picture",
                             Width= 150,
@@ -335,6 +341,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 5,
+                            ColumnOrder = 5,
                             HeaderName = "Age",
                             DataField = "Age",
                             Width= width,
@@ -346,10 +353,11 @@
                             Sortable = true,
                             RowGroup = true,
                             ShowGroupingButtons = true,
-                            AlingContent = AlingContent.Center
+                            AlingContent = AlingContent.Center,
                         },
                         new GridColumn<Person> {
                             CellId = 9,
+                            ColumnOrder = 9,
                             HeaderName = "EyeColor",
                             DataField = "EyeColor",
                             Width= width,
@@ -358,11 +366,15 @@
                             CellData = (x) => x.EyeColor,
                             CellDataType = CellDataType.Text,
                             Sortable = true,
+                            RowGroup = true,
+                            ShowGroupingButtons = true,
                         },
                         new GridColumn<Person> {
                             CellId = 0,
-                            HeaderName = "Name",
+                            ColumnOrder = 0,
+                            HeaderName = "The text in the Name column is too long for a row",
                             DataField = "Name",
+                            WrapHeaderText = true,
                             Width= width,
                             Height= height,
                             CanGrow = canGrow,
@@ -373,6 +385,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 1,
+                            ColumnOrder = 1,
                             HeaderName = "Gender",
                             DataField = "Gender",
                             Width= width,
@@ -382,7 +395,8 @@
                             CellDataType = CellDataType.Text
                         },
                         new GridColumn<Person> {
-                            CellId = 6,
+                            CellId = 13,
+                            ColumnOrder = 13,
                             HeaderName = "Company",
                             DataField = "Company",
                             Width= width,
@@ -392,6 +406,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 7,
+                            ColumnOrder = 7,
                             HeaderName = "Email",
                             DataField = "Email",
                             Width= width,
@@ -401,6 +416,7 @@
                         },
                           new GridColumn<Person> {
                             CellId = 11,
+                            ColumnOrder = 11,
                             HeaderName = "Phone",
                             DataField = "Phone",
                             Width= width,
@@ -410,6 +426,7 @@
                         },
                            new GridColumn<Person> {
                             CellId = 12,
+                            ColumnOrder = 12,
                             HeaderName = "Address",
                             DataField = "Address",
                             Width= width,
@@ -418,16 +435,21 @@
                             CellData = (x) => x.Address
                         },
                             new GridColumn<Person> {
-                            CellId = 13,
+                            CellId = 4,
+                            ColumnOrder = 4,
                             HeaderName = "Registered",
                             DataField = "Registered",
                             Width= width,
                             Height= height,
                             CanGrow = canGrow,
-                            CellData = (x) => x.IsActive
+                            CellData = (x) => x.Registered,
+                            CellDataType = CellDataType.Date,
+                            Sortable = true
+
                         },
                             new GridColumn<Person> {
                             CellId = 14,
+                            ColumnOrder = 14,
                             HeaderName = "Latitude",
                             DataField = "Latitude",
                             Width= width,
@@ -437,6 +459,7 @@
                         },
                             new GridColumn<Person> {
                             CellId = 15,
+                            ColumnOrder = 15,
                             HeaderName = "Longitude",
                             DataField = "Longitude",
                             Width= width,
@@ -446,6 +469,7 @@
                         },
                             new GridColumn<Person> {
                             CellId = 16,
+                            ColumnOrder = 16,
                             HeaderName = "Greeting",
                             DataField = "Greeting",
                             Width= width,
@@ -455,6 +479,7 @@
                         },
                             new GridColumn<Person> {
                             CellId = 17,
+                            ColumnOrder = 17,
                             HeaderName = "FavoriteFruit",
                             DataField = "FavoriteFruit",
                             Width= width,
@@ -465,16 +490,6 @@
 
         };
     }
-
-    //var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:5000/api/person/addpersons");
-
-    //var client = ClientFactory.CreateClient();
-
-    //var httpContent = new StringContent(JsonConvert.SerializeObject(Persons), Encoding.UTF8, "application/json");
-
-    //var response = await client.PostAsync("http://localhost:5000/api/person/addpersons", httpContent);
-
-    //var response = await HttpClient.PostAsJsonAsync("api/person/addpersons", Persons);
 }
 
 

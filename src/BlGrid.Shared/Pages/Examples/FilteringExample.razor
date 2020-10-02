@@ -132,16 +132,16 @@
     {
         var height = 40;
         var width = 200;
-        var canGrow = 0;
+        var canGrow = 1;
 
         return new List<GridColumn<Person>> {
                         new GridColumn<Person> {
                             CellId = 3,
                             HeaderName = "IsActive",
                             DataField = "IsActive",
-                            Width= 150,
+                            Width= 100,
                             Height= height,
-                            CanGrow = canGrow,
+                            CanGrow = 0,
                             CellData = (x) => x.IsActive,
                             AlingContent = AlingContent.Center
                         },

@@ -129,6 +129,7 @@
             RowHeight = 40,
             GridClass = "cvs-bl-grid",
             EnableGrouping = true, // Enable Grouping
+            //CheckboxSelectionColumn = true,
         };
     }
 
@@ -156,11 +157,12 @@
     {
         var height = 40;
         var width = 200;
-        var canGrow = 0;
+        var canGrow = 1;
 
         return new List<GridColumn<Person>> {
                         new GridColumn<Person> {
                             CellId = 3,
+                            ColumnOrder = 3,
                             HeaderName = "IsActive",
                             DataField = "IsActive",
                             Width= 150,
@@ -168,12 +170,13 @@
                             CanGrow = canGrow,
                             CellData = (x) => x.IsActive,
                             AlingContent = AlingContent.Center,
-                            RowGroupIndex = 0, //Is set, blgrid group by this column in start up. Is not set you can dinamically group by this column
+                            //RowGroupIndex = 0, //Is set, blgrid group by this column in start up. Is not set you can dinamically group by this column
                             RowGroup = true, //Enable grouping
                             ShowGroupingButtons = true //Hide-Show Grouping buttons
                         },
                         new GridColumn<Person> {
                             CellId = 5,
+                            ColumnOrder = 5,
                             HeaderName = "Age",
                             DataField = "Age",
                             Width= width,
@@ -187,6 +190,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 0,
+                            ColumnOrder = 0,
                             HeaderName = "Name",
                             DataField = "Name",
                             Width= width,
@@ -196,6 +200,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 1,
+                            ColumnOrder = 1,
                             HeaderName = "Gender",
                             DataField = "Gender",
                             Width= width,
@@ -206,6 +211,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 6,
+                            ColumnOrder = 6,
                             HeaderName = "Company",
                             DataField = "Company",
                             Width= width,
@@ -215,6 +221,7 @@
                         },
                         new GridColumn<Person> {
                             CellId = 7,
+                            ColumnOrder = 7,
                             HeaderName = "Email",
                             DataField = "Email",
                             Width= width,
@@ -224,6 +231,7 @@
                         },
                           new GridColumn<Person> {
                             CellId = 11,
+                            ColumnOrder = 8,
                             HeaderName = "Phone",
                             DataField = "Phone",
                             Width= width,
@@ -233,6 +241,7 @@
                         },
                            new GridColumn<Person> {
                             CellId = 12,
+                            ColumnOrder = 9,
                             HeaderName = "Address",
                             DataField = "Address",
                             Width= width,

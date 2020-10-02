@@ -1,4 +1,5 @@
 ﻿@page "/DummyExample"
+@page "/DummyExample/{myDummyParameter:int}"
 
 @using BlGrid.Infrastructure.Entities
 @using BlGrid.Infrastructure.Enums
@@ -13,6 +14,7 @@
 @inject IThemeMessageService<ThemeConfigData> ThemeMessageService
 @inject HttpClient HttpClient
 @inject IHttpClientFactory ClientFactory
+@inject NavigationManager NavigationManager
 
 <div class="container-fluid" style="padding-top: 10px;">
     <div class="row" style="height: calc(100% - 60px)">
@@ -31,7 +33,8 @@
                          GridData="@Persons"
                          GridColumns="@GridColumns"
                          TItem="Person"
-                         GridOptions="GridOptions">
+                         GridOptions="GridOptions"
+                         >
                 </BlgGrid>
             </div>
         </div>
@@ -40,36 +43,33 @@
 
 @code {
 
+    [Parameter]
+    public int MyDummyParameter { get; set; }
 
     private BlgGrid<Person> _blGridReference;
 
-    public List<Person> Persons { get; set; }
+    public List<Person> Persons { get; set; } = new List<Person>();
 
-    public List<GridColumn<Person>> GridColumns { get; set; }
+    public List<GridColumn<Person>> GridColumns { get; set; } = new List<GridColumn<Person>>();
 
     public GridColumn<Person> GroupGridColumn { get; set; }
 
     public GridOptions<Person> GridOptions { get; set; }
 
 
-    public override async Task SetParametersAsync(ParameterView parameters)
+    protected override async Task OnInitializedAsync()
     {
+        SetupTheme();
+
         GridOptions = GetGridOptions();
+
+        GridColumns = GetGridColumns();
 
         var persons = await GetPersons();
 
         GridOptions.NumberOfRows = persons.Count;
 
-        Persons = persons;
-
-        GridColumns = GetGridColumns();
-
-        StateHasChanged();
-    }
-
-    protected override void OnInitialized()
-    {
-        SetupTheme();
+        _blGridReference.SetRowData(persons);
     }
 
     private void SetupTheme()
@@ -110,6 +110,7 @@
             HeaderHeight = 40,
             RowHeight = 40,
             GridClass = "cvs-bl-grid",
+            SuppressRowClickSelection = false,
         };
     }
 
@@ -117,7 +118,7 @@
     {
         var height = 40;
         var width = 200;
-        var canGrow = 0;
+        var canGrow = 1;
 
         return new List<GridColumn<Person>> {
                         new GridColumn<Person> {
@@ -129,6 +130,7 @@
                             CanGrow = canGrow,
                             CellData = (x) => x.IsActive,
                             AlingContent = AlingContent.Center,
+                            ColumnOrder = 1,
                         },
                         new GridColumn<Person> {
                             CellId = 5,
@@ -139,6 +141,7 @@
                             CanGrow = canGrow,
                             CellData = (x) => x.Age,
                             AlingContent = AlingContent.Center,
+                            ColumnOrder = 2
                         },
                         new GridColumn<Person> {
                             CellId = 0,
@@ -148,6 +151,7 @@
                             Height= height,
                             CanGrow = canGrow,
                             CellData = (x) => x.Name,
+                            ColumnOrder = 3
                         },
                         new GridColumn<Person> {
                             CellId = 1,
@@ -156,7 +160,8 @@
                             Width= width,
                             Height= height,
                             CanGrow = canGrow,
-                            CellData = (x) => x.Gender
+                            CellData = (x) => x.Gender,
+                            ColumnOrder = 4
                         },
                         new GridColumn<Person> {
                             CellId = 6,
@@ -166,6 +171,7 @@
                             Height= height,
                             CanGrow = canGrow,
                             CellData = (x) => x.Company,
+                            ColumnOrder = 5
                         },
                         new GridColumn<Person> {
                             CellId = 7,
@@ -175,6 +181,7 @@
                             Height= height,
                             CanGrow = canGrow,
                             CellData = (x) => x.Email,
+                            ColumnOrder = 6
                         },
                           new GridColumn<Person> {
                             CellId = 11,
@@ -183,7 +190,8 @@
                             Width= width,
                             Height= height,
                             CanGrow = canGrow,
-                            CellData = (x) => x.Phone
+                            CellData = (x) => x.Phone,
+                              ColumnOrder = 7
                         },
                            new GridColumn<Person> {
                             CellId = 12,
@@ -193,6 +201,7 @@
                             Height= height,
                             CanGrow = canGrow,
                             CellData = (x) => x.Address,
+                               ColumnOrder = 8
                         }
 
         };
