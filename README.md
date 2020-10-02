@@ -1,4 +1,4 @@
-# Blgrid demos v.1.6.8
+# Blgrid demos v.1.7.8
 Live demos [here](https://www.blgrid.com/)
 
 Nuget package [here](https://www.nuget.org/packages/BlGrid/)
@@ -40,8 +40,12 @@ A simple example is provided with the minimum possible configuration, you can fi
 * Base on Flexbox CSS
 * Not Boostrap dependency
 * Not FontAwesome dependency
+* Pinned Columns ( New in 1.7.8)
+* Navigate to specific page in paginator (New in 1.7.8)
+* Auto Text Wraping (New in 1.7.8)
+* DateTime Filter (New in 1.7.8)
+* Base on CSS Grid (New in 1.7.8)
 
 ### Upcomming Features
 * Row virtualization
-* Pinned Columns
-* Navigate to specific page in paginator
+* Row and Column spanning
