@@ -3,36 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using BlGrid.Api.Infrastructure.QueryHelpers.FilterHelpers;
 
 namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterTypes
 {
     internal class DateFilter<TEntity> : IBaseFilter<TEntity>
     {
-        public IQueryable<TEntity> BuildFilterExpression(IQueryable<TEntity> query, List<FilterPredicate> filterPredicates, ParameterExpression accessExpression)
-        {
-
-            var mainPredicate = filterPredicates.First(p => p.OperatorType == FilterCondition.None).Predicate;
-            var predicates = filterPredicates.Where(p => p.OperatorType != FilterCondition.None);
-
-            foreach (var predicate in predicates)
-            {
-                if (predicate.OperatorType == FilterCondition.Or)
-                {
-                    mainPredicate = Expression.Or(mainPredicate, predicate.Predicate);
-                }
-                else
-                {
-                    var queraExpresion1 = Expression.Lambda<Func<TEntity, bool>>(predicate.Predicate, accessExpression);
-                    query = query.Where(queraExpresion1);
-                }
-            }
-
-            var queraExpresion = Expression.Lambda<Func<TEntity, bool>>(mainPredicate, accessExpression);
-
-            return query.Where(queraExpresion);
-        }
-
         public FilterPredicate GetPredicateExpression(IQueryable<TEntity> query, AdvancedFilterModel filter, ParameterExpression accessExpression)
         {
             var resultPredicate = GetSingleFilterPredicateExpression(filter, accessExpression);
@@ -53,22 +30,20 @@ namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterTypes
             var type = typeof(TEntity);
             var propertyType = type.GetProperty(filter.Column);
 
-            var property = type.GetProperty(filter.Column);
-            var propertyExpression = Expression.MakeMemberAccess(accessExpression, property ?? throw new InvalidOperationException());
+            var propertyExpression = Expression.MakeMemberAccess(accessExpression, propertyType ?? throw new InvalidOperationException());
+           
 
             if (propertyType == null) throw new NullReferenceException(nameof(propertyType));
 
-            var dateProperty = propertyType.PropertyType.GetProperty("Date");
-            if (dateProperty == null) throw new NullReferenceException(nameof(dateProperty));
+            var dateValue = filter.Value != null ? 
+                DateTime.ParseExact(filter.Value, filter.DateFormat, CultureInfo.InvariantCulture) :
+                (DateTime?)null; ;
 
-            var dateExpression = Expression.MakeMemberAccess(propertyExpression, dateProperty);
+            var dateAdditional = filter.AdditionalValue != null ? 
+                DateTime.ParseExact(filter.AdditionalValue, filter.DateFormat, CultureInfo.InvariantCulture) : 
+                (DateTime?)null;
 
-            var dateValue = DateTime.ParseExact(filter.Value, filter.DateFormat, CultureInfo.InvariantCulture);
-
-            var dateAdditional = filter.AdditionalValue != null ? DateTime.ParseExact(filter.AdditionalValue, filter.DateFormat, CultureInfo.InvariantCulture)
-                                                                      : (DateTime?)null;
-
-            var filterExpression = GetOperationExpression(filter, dateExpression, dateValue, dateAdditional);
+            var filterExpression = GetOperationExpression(filter, propertyExpression, dateValue, dateAdditional);
 
             return filterExpression;
         }
@@ -76,33 +51,54 @@ namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterTypes
         private static Expression GetOperationExpression(
             AdvancedFilterModel filter,
             Expression accessExpression,
-            DateTime value,
+            DateTime? value,
             DateTime? valueAdditional = null)
         {
             Expression predicate;
+
+            var type = typeof(TEntity);
+            var propertyType = type.GetProperty(filter.Column);
+
+            Expression constant;
+
+            Expression constantAdditional;
+
+            if (Nullable.GetUnderlyingType(propertyType.PropertyType) != null)
+            {
+                constant = Expression.Convert(Expression.Constant(value != null ? value : (DateTime?)null), propertyType.PropertyType);
+                constantAdditional = Expression.Convert(
+                    Expression.Constant(valueAdditional != null ? 
+                        valueAdditional : 
+                        (DateTime?)null), propertyType.PropertyType);
+            }
+            else
+            {
+                constant = Expression.Constant(value);
+                constantAdditional = Expression.Constant(valueAdditional);
+            }
 
             switch (filter.Operator)
             {
 
                 case FilterOperator.Equals:
-                    predicate = Expression.Equal(accessExpression, Expression.Constant(value));
+                    predicate = Expression.Equal(accessExpression, constant);
                     break;
 
                 case FilterOperator.NotEquals:
-                    predicate = Expression.NotEqual(accessExpression, Expression.Constant(value));
+                    predicate = Expression.NotEqual(accessExpression, constant);
                     break;
 
                 case FilterOperator.GreaterThan:
-                    predicate = Expression.GreaterThanOrEqual(accessExpression, Expression.Constant(value));
+                    predicate = Expression.GreaterThanOrEqual(accessExpression, constant);
                     break;
 
                 case FilterOperator.LessThan:
-                    predicate = Expression.LessThanOrEqual(accessExpression, Expression.Constant(value));
+                    predicate = Expression.LessThanOrEqual(accessExpression, constant);
                     break;
 
                 case FilterOperator.Range:
-                    var predicateLess = Expression.GreaterThanOrEqual(accessExpression, Expression.Constant(value));
-                    var predicateGreat = Expression.LessThanOrEqual(accessExpression, Expression.Constant(valueAdditional));
+                    var predicateLess = Expression.GreaterThanOrEqual(accessExpression, constant);
+                    var predicateGreat = Expression.LessThanOrEqual(accessExpression, constantAdditional);
                     predicate = Expression.And(predicateLess, predicateGreat);
                     break;
 

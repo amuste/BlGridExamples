@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 
 namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterHelpers
 {
-    internal class SortHelper<TEntity>
+    public class SortHelper<TEntity>
     {
-        internal IQueryable<TEntity> Apply(IQueryable<TEntity> query, SearchModel searchModel)
+        public IQueryable<TEntity> Apply(IQueryable<TEntity> query, SearchModel searchModel)
         {
             var isAscendingSort = searchModel.SortModel.Order == SortOrder.Ascending;
 

@@ -18,20 +18,49 @@ namespace BlGrid.Api.Infrastructure
 
         public static bool IsNumeric(this Type type)
         {
-            return type.IsPrimitive() ||
-                    type == typeof(int) ||
-                    type == typeof(int?) ||
-                    type == typeof(decimal) ||
-                    type == typeof(decimal?) ||
-                    type == typeof(float) ||
-                    type == typeof(float?) ||
-                    type == typeof(double) ||
-                    type == typeof(double?);
+            var baseType = type;
+            var notNUllableType = Nullable.GetUnderlyingType(type);
+
+            if (notNUllableType != null)
+                baseType = notNUllableType;
+
+            switch (Type.GetTypeCode(baseType))
+            {
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.Decimal:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                    return true;
+            }
+
+            return false;
+        }
+
+        public static bool IsBoolean(this Type type)
+        {
+            var baseType = type;
+            var notNUllableType = Nullable.GetUnderlyingType(type);
+
+            if (notNUllableType != null)
+                baseType = notNUllableType;
+
+            switch (Type.GetTypeCode(baseType))
+            {
+                case TypeCode.Boolean:
+                    return true;
+            }
+
+            return false;
         }
 
         public static bool IsString(this Type type)
         {
-            return  type == typeof(string) ||
+            return type == typeof(string) ||
                     type == typeof(string);
         }
 
