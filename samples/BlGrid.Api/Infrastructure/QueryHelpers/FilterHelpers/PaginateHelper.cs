@@ -2,9 +2,9 @@
 
 namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterHelpers
 {
-    internal class PaginateHelper<TEntity>
+    public class PaginateHelper<TEntity>
     {
-        internal IQueryable<TEntity> Apply(IQueryable<TEntity> query, SearchModel searchModel)
+        public IQueryable<TEntity> Apply(IQueryable<TEntity> query, SearchModel searchModel)
         {
             if (searchModel.PaginationModel.CurrentPage.HasValue && searchModel.PaginationModel.PageSize.HasValue)
                 return query

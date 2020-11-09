@@ -18,11 +18,7 @@ namespace BlGrid.Api.Infrastructure.QueryHelpers
 
         public FilterCondition Condition { get; set; }
 
-        public FilterMode Mode { get; set; }
-
         public string DateFormat { get; set; }
-
-        public IList<string> FilterValues { get; set; }
 
         public FilterCondition FilterLinkCondition { get; set; } = FilterCondition.And;
     }

@@ -7,12 +7,6 @@ namespace BlGrid.Api.Infrastructure.QueryHelpers.FilterTypes
 {
     internal interface IBaseFilter<TEntity>
     {
-        IQueryable<TEntity> BuildFilterExpression(
-            IQueryable<TEntity> query,
-            List<FilterPredicate> filterPredicates,
-            ParameterExpression accessExpression
-            );
-
         FilterPredicate GetPredicateExpression(
           IQueryable<TEntity> query,
           AdvancedFilterModel filter,
